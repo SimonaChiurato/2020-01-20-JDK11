@@ -58,24 +58,24 @@ public class Model {
 		best= new ArrayList<>();
 		List<Artist> parziale= new ArrayList<>();
 		parziale.add(idMap.get(id));
-		this.cerca(parziale,idMap.get(id));
+		this.cerca(parziale);
 		return best;
 	}
-	private void cerca(List<Artist> parziale, Artist artist) {
+	private void cerca(List<Artist> parziale) {
 
-		
+		Artist ultimo= parziale.get(parziale.size()-1);
 		double peso=0.0;
-		List<Artist> vicini= Graphs.neighborListOf(grafo, artist);
+		List<Artist> vicini= Graphs.neighborListOf(grafo, ultimo);
 		
 		for(Artist a: vicini) {
 			if(!parziale.contains(a) && parziale.size()==1) {
 				parziale.add(a);
-				cerca(parziale,a);
+				cerca(parziale);
 				parziale.remove(parziale.size()-1);
-				peso=grafo.getEdgeWeight(grafo.getEdge(artist, a));
-			}else if(!parziale.contains(a) && grafo.getEdgeWeight(grafo.getEdge(artist, a))==peso) {
+				peso=grafo.getEdgeWeight(grafo.getEdge(ultimo, a));
+			}else if(!parziale.contains(a) && grafo.getEdgeWeight(grafo.getEdge(ultimo, a))==peso) {
 				parziale.add(a);
-				cerca(parziale,a);
+				cerca(parziale);
 				parziale.remove(parziale.size()-1);
 			}
 		}
