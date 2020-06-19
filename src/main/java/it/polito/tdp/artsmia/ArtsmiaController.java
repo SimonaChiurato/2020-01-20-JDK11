@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.artsmia.db.Adiacenza;
+import it.polito.tdp.artsmia.model.Artist;
 import it.polito.tdp.artsmia.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,16 +54,31 @@ public class ArtsmiaController {
     		List<Adiacenza> a= this.model.adiacenze();
     		Collections.sort(a);
     		for(Adiacenza c: a) {
-    			this.txtResult.appendText(c.getA1().getNome()+" - "+c.getA2().getNome()+" peso: "+c.getPeso()+"\n");
+    			this.txtResult.appendText(c.getA1().getId()+": "+c.getA1().getNome()+" - "+c.getA2().getId()+": "+c.getA2().getNome()+" peso: "+c.getPeso()+"\n");
     		}
     	}
-    	txtResult.appendText("Calcola artisti connessi");
+
     }
 
     @FXML
     void doCalcolaPercorso(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Calcola percorso");
+    	String input= this.txtArtista.getText();
+    	if(!input.matches("[0-9]+")) {
+    		txtResult.appendText("Devi inserire un numero!");
+    		return;
+    	}
+    	int id= Integer.parseInt(input);
+    	if(!this.model.controllaId(id)) {
+    		txtResult.appendText("Non esiste un autore con quell'id!");
+    		return;
+    	}
+     	List<Artist> result=this.model.calcolaPercorso(id);
+     	
+    txtResult.appendText("PERCORSO PIU' LUNGO "+result.size()+"\n");
+    for(Artist a: result) {
+    	this.txtResult.appendText(a.getId()+" "+a.getNome()+"\n");
+    }
     }
 
     @FXML
